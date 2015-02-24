@@ -21,34 +21,35 @@
 
 package org.jlib.reflect;
 
-public class NamedClassReflector
-implements UntypedClassReflector {
+import org.jlib.core.exception.ApplicationException;
+import org.jlib.core.message.Message;
+
+/**
+ * {@link ApplicationException} thrown when a class cannot be instantiated. It may be used by factories as a wrapper for
+ * any kind of Exceptions occurring when trying to instantiate a class.
+ *
+ * @author Igor Akkerman
+ */
+public abstract class ClassInstanceException
+extends ApplicationException {
+
+    private static final long serialVersionUID = - 8652252161776673093L;
 
     private final String className;
 
-    public NamedClassReflector(final String className) {
+    public ClassInstanceException(final Message message, final String className) {
+        super(message.with("class", className));
+
         this.className = className;
     }
 
-    @Override
-    public Class<?> get()
-    throws ClassInstantiationException {
-        try {
-            return Class.forName(className);
-        }
-        catch (final ClassNotFoundException exception) {
-            throw new ClassInstantiationException(className, exception);
-        }
+    public ClassInstanceException(final Message message, final String className, final Exception cause) {
+        this(message, className);
+
+        initCause(cause);
     }
 
-    protected String getClassName() {
+    public String getClassName() {
         return className;
-    }
-
-    @Override
-    public <Type> TypedClassReflector<Type> withType(final Class<Type> staticType) {
-        return null;
-        // FIXME: implement
-//        return new ConcreteTypedClassReflector<>(this, staticType);
     }
 }

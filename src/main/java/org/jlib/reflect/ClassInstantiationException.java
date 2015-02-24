@@ -21,27 +21,28 @@
 
 package org.jlib.reflect;
 
-import java.lang.reflect.Method;
+import org.jlib.core.message.Message;
 
 import static org.jlib.core.message.MessageUtility.message;
 
-public class ReflectionInvoker<ReturnValue> implements Invoker<ReturnValue> {
+public class ClassInstantiationException
+extends ClassInstanceException {
 
-    private final Method method;
+    private static final long serialVersionUID = - 8652252161776673093L;
 
-    public ReflectionInvoker(final Method  method) {
-        this.method = method;
+    public ClassInstantiationException(final Message message, final String className) {
+        super(message, className);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public ReturnValue invoke(final Object... arguments)
-    throws InvalidMethodException {
-        try {
-            return (ReturnValue) method.invoke(method, arguments);
-        }
-        catch (final ReflectiveOperationException exception) {
-            throw new InvalidMethodException(message(), method.getClass().getName(), method.toString());
-        }
+    public ClassInstantiationException(final Message message, final String className, final Exception cause) {
+        super(message, className, cause);
+    }
+
+    public ClassInstantiationException(final String className) {
+        super(message(), className);
+    }
+
+    public ClassInstantiationException(final String className, final Exception cause) {
+        super(message(), className, cause);
     }
 }
