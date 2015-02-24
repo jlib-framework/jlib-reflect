@@ -21,16 +21,18 @@
 
 package org.jlib.reflect;
 
-public class ClassReflectorAwareConstructorReflector<Type>
-implements MethodReflector<Type,MethodOverloadReflector<Type>> {
+import org.jlib.core.exception.InvalidArgumentException;
+import org.jlib.core.message.Message;
 
-    private final TypedClassReflector<Type> typedClassReflector;
+public class NullArgumentException extends InvalidArgumentException {
 
-    public ClassReflectorAwareConstructorReflector(final TypedClassReflector<Type> typedClassReflector) {
-        this.typedClassReflector = typedClassReflector;
+    private static final long serialVersionUID = - 2292360979135018076L;
+
+    protected NullArgumentException(final Message message) {
+        super(message);
     }
 
-    protected TypedClassReflector<Type> getTypedClassReflector() {
-        return typedClassReflector;
+    protected NullArgumentException(final Message message, final Exception cause) {
+        super(message, cause);
     }
 }

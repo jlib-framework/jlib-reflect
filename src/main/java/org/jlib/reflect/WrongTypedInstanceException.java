@@ -21,27 +21,25 @@
 
 package org.jlib.reflect;
 
-import java.lang.reflect.Method;
+import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.jlib.core.message.MessageUtility.message;
 
-public class ReflectionInvoker<ReturnValue> implements Invoker<ReturnValue> {
+public class WrongTypedInstanceException
+extends ClassInstanceException {
 
-    private final Method method;
+    private static final long serialVersionUID = - 7474100445702869755L;
 
-    public ReflectionInvoker(final Method  method) {
-        this.method = method;
+    private final List<String> expectedParentTypeClassNames;
+
+    public WrongTypedInstanceException(final Class<?> clazz, final List<Class<?>> expectedParentTypes) {
+        super(message().with("expectedParentTypes", expectedParentTypes), clazz.getName());
+
+        this.expectedParentTypeClassNames = expectedParentTypes.stream().map(Class::getName).collect(toList());
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public ReturnValue invoke(final Object... arguments)
-    throws InvalidMethodException {
-        try {
-            return (ReturnValue) method.invoke(method, arguments);
-        }
-        catch (final ReflectiveOperationException exception) {
-            throw new InvalidMethodException(message(), method.getClass().getName(), method.toString());
-        }
+    public List<String> getExpectedParentTypeClassNames() {
+        return expectedParentTypeClassNames;
     }
 }
