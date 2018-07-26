@@ -24,7 +24,7 @@ package org.jlib.reflect.languageelement.corereflection;
 import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -40,7 +40,7 @@ public class ReflectionStaticLanguageItemSupplierTest {
 
     @Test
     public void invokeStaticVoidEmpty()
-        throws Exception {
+    throws Exception {
         // only testing for no thrown exception
         final Method method = CLASS.getMethod("staticVoidEmpty");
         ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method);
@@ -48,7 +48,7 @@ public class ReflectionStaticLanguageItemSupplierTest {
 
     @Test
     public void invokeStaticVoidString()
-        throws Exception {
+    throws Exception {
         // only testing for no thrown exception
         final Method method = CLASS.getMethod("staticVoidString", String.class);
         ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method, "bla");
@@ -56,37 +56,37 @@ public class ReflectionStaticLanguageItemSupplierTest {
 
     @Test
     public void invokeStaticIntEmpty()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("staticIntEmpty");
         assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method)).isEqualTo(42);
     }
 
     @Test
     public void invokeStaticStringInt()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("staticStringInt", int.class);
         assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method, 42)).isEqualTo("42");
     }
 
     @Test
     public void invokeStaticStringString()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("staticStringString", String.class);
-        assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method, "HalliHallo!")).isEqualTo(
-            "HALLIHALLO!");
+        assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method, "HalliHallo!"))
+        .isEqualTo("HALLIHALLO!");
     }
 
     @Test
     public void invokeStaticStringStringOverload()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("staticStringString", String.class, String.class);
-        assertThat(
-            ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method, "bla ", "blub")).isEqualTo("bla blub");
+        assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeStaticMethod(method, "bla ", "blub"))
+        .isEqualTo("bla blub");
     }
 
     @Test
     public void invokeVoidEmpty()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("voidEmpty");
         ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method);
         verify(service).voidEmpty();
@@ -95,7 +95,7 @@ public class ReflectionStaticLanguageItemSupplierTest {
 
     @Test
     public void invokeVoidString()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("voidString", String.class);
         ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method, "boo");
         verify(service).voidString("boo");
@@ -104,7 +104,7 @@ public class ReflectionStaticLanguageItemSupplierTest {
 
     @Test
     public void invokeIntEmpty()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("intEmpty");
         when(service.intEmpty()).thenReturn(4711);
         assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method)).isEqualTo(4711);
@@ -114,34 +114,34 @@ public class ReflectionStaticLanguageItemSupplierTest {
 
     @Test
     public void invokeStringInt()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("stringInt", int.class);
         when(service.stringInt(4711)).thenReturn("boo");
-        assertThat(
-            ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method, 4711)).isEqualTo("boo");
+        assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method, 4711))
+        .isEqualTo("boo");
         verify(service).stringInt(4711);
         verifyNoMoreInteractions(service);
     }
 
     @Test
     public void invokeStringString()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("stringString", String.class);
         when(service.stringString("boofar")).thenReturn("raboof");
-        assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method, "boofar")).isEqualTo(
-            "raboof");
+        assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method, "boofar"))
+        .isEqualTo("raboof");
         verify(service).stringString("boofar");
         verifyNoMoreInteractions(service);
     }
 
     @Test
     public void invokeStringStringOverload()
-        throws Exception {
+    throws Exception {
         final Method method = CLASS.getMethod("stringString", String.class, String.class);
         when(service.stringString("boofar", "abracadabra")).thenReturn("raboof");
-        assertThat(ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method, "boofar",
-                                                                                  "abracadabra")).isEqualTo(
-            "raboof");
+        assertThat(
+        ReflectionLanguageElementHandler.INSTANCE.invokeInstanceMethod(service, method, "boofar", "abracadabra"))
+        .isEqualTo("raboof");
         verify(service).stringString("boofar", "abracadabra");
         verifyNoMoreInteractions(service);
     }
