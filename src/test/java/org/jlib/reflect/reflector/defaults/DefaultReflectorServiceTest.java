@@ -22,9 +22,10 @@
 package org.jlib.reflect.reflector.defaults;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import org.jlib.reflect.languageelement.ProgramElementException;
 import org.jlib.reflect.reflector.ReflectorService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DefaultReflectorServiceTest {
 
@@ -33,18 +34,17 @@ public class DefaultReflectorServiceTest {
     @Test
     @SuppressWarnings("UnnecessaryBoxing")
     public void staticRun()
-        throws Exception {
+    throws Exception {
 
-        final Number value = service
-            .useClass("java.lang.Integer")                  // TypedClass<?>
-            .withType(Number.class)                         // TypedClass<Number>
-            .withSupertypes(Integer.class)                  // TypedClass<Number> (verify actual supertype of instantiated class, keep static type)
-            .staticMethod("valueOf")                        // MethodOverload<?>
-            .withParameterTypes(int.class)                  // TypedMethod1<Method, ?, int>
-            .withReturnType(Number.class)                   // TypedMethod1<Method, Number, int>
-            .invoke(42)                                     // MethodReturn<Number>
-            .returning(Integer.class)                       // MethodReturn<Number> (verify supertype of returned value, keep static type)
-            .getReturned();                                 // Number
+        final Number value = service.useClass("java.lang.Integer")       // TypedClass<?>
+                                    .withType(Number.class)                         // TypedClass<Number>
+                                    .withSupertypes(Integer.class)                  // TypedClass<Number> (verify actual supertype of instantiated class, keep static type)
+                                    .staticMethod("valueOf")       // MethodOverload<?>
+                                    .withParameterTypes(int.class)                  // TypedMethod1<Method, ?, int>
+                                    .withReturnType(Number.class)                   // TypedMethod1<Method, Number, int>
+                                    .invoke(42)                          // MethodReturn<Number>
+                                    .returning(Integer.class)                       // MethodReturn<Number> (verify supertype of returned value, keep static type)
+                                    .getReturned();                                 // Number
 
         assertThat(value).isEqualTo(Integer.valueOf(42));
     }
@@ -52,54 +52,45 @@ public class DefaultReflectorServiceTest {
     @Test
     @SuppressWarnings("UnnecessaryBoxing")
     public void nonstaticRun()
-        throws Exception {
-        final Number value = service
-            .useClass("java.lang.Integer")                  // TypedClass<?>
-            .withType(Number.class)                         // TypedClass<Number>
-            .withSupertypes(Integer.class)                  // TypedClass<Number>
-            .constructor()                                  // ConstructorOverload<Number>
-            .withParameterTypes(int.class)                  // TypedMethod1<Constructor, Number, int>
-            .invoke(42)                                     // MethodReturn<Number>
-            .returning(Integer.class)                       // MethodReturn<Number>
-            .method("compareTo")                            // MethodOverload<?>
-            .withParameterTypes(Integer.class)              // TypedMethod1<Method, int, Integer>
-            .withReturnType(int.class)                      // TypedMethod1<Method, int, Object>
-            .invoke(3)                                      // MethodReturn<int>
-            .returning(Integer.class)                       // MethodReturn<int>
-            .getReturned();                                 // int
+    throws Exception {
+        final Number value = service.useClass("java.lang.Integer")       // TypedClass<?>
+                                    .withType(Number.class)                         // TypedClass<Number>
+                                    .withSupertypes(Integer.class)                  // TypedClass<Number>
+                                    .constructor()                                  // ConstructorOverload<Number>
+                                    .withParameterTypes(int.class)                  // TypedMethod1<Constructor, Number, int>
+                                    .invoke(42)                          // MethodReturn<Number>
+                                    .returning(Integer.class)                       // MethodReturn<Number>
+                                    .method("compareTo")               // MethodOverload<?>
+                                    .withParameterTypes(Integer.class)              // TypedMethod1<Method, int, Integer>
+                                    .withReturnType(int.class)                      // TypedMethod1<Method, int, Object>
+                                    .invoke(3)                           // MethodReturn<int>
+                                    .returning(Integer.class)                       // MethodReturn<int>
+                                    .getReturned();                                 // int
 
         assertThat(value).isEqualTo(Integer.valueOf(1));
     }
 
     @Test
     public void instance()
-        throws Exception {
-        final CharSequence value = service
-            .useClass("java.lang.String")
-            .withType(CharSequence.class)
-            .instance("Hello jlib!");
+    throws Exception {
+        final CharSequence value = service.useClass("java.lang.String").withType(CharSequence.class).instance("Hello jlib!");
 
         assertThat(value).isEqualTo("Hello jlib!");
     }
 
     @Test
     public void instancePrimitiveArray()
-        throws Exception {
-        final CharSequence value = service
-            .useClass("java.lang.String")
-            .withType(CharSequence.class)
-            .instance(new char[]{ 'a', 'b', 'c' });
+    throws Exception {
+        final CharSequence value = service.useClass("java.lang.String").withType(CharSequence.class).instance(new char[]{ 'a', 'b', 'c' });
 
         assertThat(value).isEqualTo("abc");
     }
 
-    @Test(expected = ProgramElementException.class)
-    public void instanceWrongConstructor()
-        throws Exception {
-        final Number value = service
-            .useClass("java.lang.Integer")
-            .withType(Number.class)
-            .instance();
+    @Test
+    public void instanceWrongConstructor() {
+        Throwable thrown = catchThrowable(() -> service.useClass("java.lang.Integer").withType(Number.class).instance());
+
+        assertThat(thrown).isInstanceOf(ProgramElementException.class);
     }
 }
 
