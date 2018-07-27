@@ -28,8 +28,6 @@ plugins {
     id 'net.researchgate.release' version '2.6.0'
 }
 
-version = '1.0.0-SNAPSHOT'
-
 description = 'jlib fluent reflection library'
 ext.detailedDescription = 'jlib library for fluent reflection access'
 
