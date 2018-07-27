@@ -33,13 +33,9 @@ ext.detailedDescription = 'jlib library for fluent reflection access'
 
 apply from: 'jlib.gradle'
 
-repositories {
-    mavenLocal()
-}
-
 dependencies {
-    implementation 'org.jlib:jlib-message:1.0.0-SNAPSHOT'
-    implementation 'org.jlib:jlib-exception:1.0.0-SNAPSHOT'
+    implementation 'org.jlib:jlib-message:1.0.0'
+    implementation 'org.jlib:jlib-exception:1.0.0'
 
     testImplementation 'org.mockito:mockito-core:2.20.0'
 }
